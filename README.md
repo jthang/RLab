@@ -1,4 +1,4 @@
-RLab
+R Lab
 ====
 
-Experiments in R
+Repo for my R related experiments
