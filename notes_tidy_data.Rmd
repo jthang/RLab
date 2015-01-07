@@ -1,0 +1,47 @@
+---
+title: "Tidy Data Notes"
+output: html_document
+---
+
+- Tidy Data framework makes it easy to tidy messy datasets
+- Structuring datasets to facilitate analysis
+- Describe functional relationships between variables (z is a linear combination of x and y)
+
+- Tidy data is a standard way of mapping the meaning of dataset to its structure
+    - Each variable forms a column
+    - Each observation forms a row
+    - Each type of observational unit forms a table
+
+- 5 most common problems with messy datasets
+    - Column headers are values, not variable names
+    - Multiple variables shored in 1 column
+    - Variables are stored in both rows and columns
+    - Multiple types of observational units stored in same table
+    - Single observational unit stored in multiple table
+  
+- Important tools
+    - Melting
+    - String Splitting
+    - Casting
+
+- 3 important components of analysis
+    - Data manipulation
+        - Filtering - subsetting or removing observations based on condition
+        - Transform - Adding or modifying variables
+        - Aggregate - Collapse multiple values into single value
+        - Sort - Changing the order of observations
+        - R functions - subset(), transform(), aggregate(), summarise(), arrange()
+    - Visualization
+    - Modeling
+      - Common transformation includes adding intercept column, turn categorical variables into dummy varibales, projecting data onto a spline function
+      
+- Other Considerations
+    - Parsing dats and times
+    - Identifying missing values
+    - Correcting character encodings (international data)
+    - Matching similar but not identical values (types)
+    - Verifying experimental design
+    - Fill in structural missing values
+    - Suspicious values
+
+
