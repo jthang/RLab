@@ -16,6 +16,8 @@ flights <- tbl_df(read.csv("flights.csv", stringsAsFactors = FALSE))
 #convert to datetime
 flights$date <- as.Date(flights$date)
 
+#Convert to a factor
+combi$Title <- factor(combi$Title)
 
 weather <- tbl_df(read.csv("weather.csv", stringsAsFactors = FALSE))
 weather$date <- as.Date(weather$date)
@@ -30,6 +32,9 @@ Cmd + Shift + P (re-run previous)
 View(flights)
 summary(flights)
 .Last.value %>% View() #View more data
+table(combi$Title)
+famIDs <- data.frame(table(combi$FamilyID)) #put into dataframe so to look at it in Explorer
+
 
 #Filter
 filter(flights, dest == "SFO")
@@ -53,6 +58,9 @@ arrange(flights, desc(dep_delay - arr_delay)) #biggest diff between 2 columns
 #Mutate
 mutate(flights, speed = dist / (time / 60)) #new columns
 mutate(flights, hour = dep %/% 100, minute = dep %% 100)
+
+#Aggregate
+aggregate(Survived ~ Child + Sex, data = train, FUN = sum)
 
 #Group-Summarize ------------------------------------
 #groupby, summarize, filter, arrange
