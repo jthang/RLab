@@ -1,8 +1,38 @@
----
-title: "Tidy Data Notes"
-output: html_document
----
+******************************************************************************************************************************
+Framework
+******************************************************************************************************************************
+Key principles:
+- Each feature forms a column
+- Each observation forms a row
+- Each observational unit forms a table
 
+R functions: Use dplyr package
+
+Steps to take:
+- Look at summary stats
+- Change dates and time
+- Identify missing values
+- Fill in missing data
+    - Handcode
+    - Median/median
+    - ANOVA
+- Correct character encoding (international data)
+- Find similar but not identical data and fill them
+- Filtering
+    - Subsetting or removing observations based on condition
+- Transformation
+    - Adding or modifying variables  
+    - Adding intercept column
+    - Turn categorical variables into dummy variables
+    - Projecting data onto a spline function
+- Aggregate
+    - Collapse multiple values into single value
+- Sort
+    - Changing the order of observations
+
+******************************************************************************************************************************
+Notes from Paper
+******************************************************************************************************************************
 - Tidy Data framework makes it easy to tidy messy datasets
 - Structuring datasets to facilitate analysis
 - Describe functional relationships between variables (z is a linear combination of x and y)
@@ -43,5 +73,3 @@ output: html_document
     - Verifying experimental design
     - Fill in structural missing values
     - Suspicious values
-
-
