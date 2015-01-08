@@ -75,3 +75,15 @@ qplot(price, data=diamonds, geom="histogram", xlim=c(0, 1000))
 #Down Sample
 dSample <- diamonds[sample(nrow(diamonds), 1000),]
 str(dSample)
+
+
+#ggplot2 ------------------------------------
+per_hour <- flights %>%
+  filter(cancelled == 0) %>%
+  mutate(time = hour + minute / 60) %>%
+  group_by(time) %>%
+  summarise(dep_delay = mean(dep_delay, na.rm = TRUE), n = n())
+
+qplot(time, dep_delay, data = per_hour)
+qplot(time, dep_delay, data = per_hour, size = n) + scale_size_area()
+qplot(time, dep_delay, data = filter(per_hour, n > 30), size = n) + scale_size_area()
