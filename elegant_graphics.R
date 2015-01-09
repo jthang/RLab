@@ -1,7 +1,41 @@
 library(ggplot2)
+library(dplyr)
+library(plyr)
+
 set.seed(1410)
 dsmall <- diamonds[sample(nrow(diamonds), 100),]
 View(diamonds)
+
+
+# Bar Graphs --------------------------------------------------------------------
+
+
+
+# Line Graphs --------------------------------------------------------------------
+
+
+
+
+# Scatter Plots --------------------------------------------------------------------
+
+
+
+
+
+
+# Histograms --------------------------------------------------------------------
+
+
+
+
+# qplot() --------------------------------------------------------------------
+
+
+
+
+
+
+# Elegant Graphics --------------------------------------------------------------------
 
 qplot(carat, price, data = diamonds)
 qplot(log(carat), log(price), data = diamonds)
@@ -15,11 +49,158 @@ qplot(carat, price, data = dsmall, geom = c("point", "smooth"), span = 0.2)
 qplot(carat, price, data = dsmall, geom = c("point", "smooth"), span = 1)
 
 # better for n > 1000
+
 library(mgcv) 
 qplot(carat, price, data = dsmall, geom = c("point", "smooth"), 
       method = "gam", formula = y ~ s(x))
 
 # for large datasets
+
 qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
       method = "gam", formula = y ~ s(x, bs = "cs"))
+
+# fits linear model
+
+library(splines)
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
+      method = "lm")
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
+      method = "lm", formula = y ~ ns(x,5))
+
+# rlm is more robust fitting algorithm
+
+library(MASS)
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
+      method = "rlm")
+
+# categorical + continuous (boxplot/jittering)
+
+qplot(color, price / carat, data = diamonds, geom = "jitter",
+      alpha = 0.5)
+qplot(color, price / carat, data = diamonds, geom = "boxplot",
+      alpha = 0.5)
+
+# distribution of variable (histogram/density)
+
+qplot(carat, data = diamonds, geom = "histogram")
+qplot(carat, data = diamonds, geom = "density")
+
+# important to experiment with bin
+
+qplot(carat, data = diamonds, geom = "histogram",
+      binwidth = 0.1, xlim = c(0,3))
+qplot(carat, data = diamonds, geom = "histogram",
+      fill = color)
+qplot(carat, data = diamonds, geom = "density",
+      color = color)
+
+# counts instance of variable (bar charts)
+
+qplot(color, data = diamonds, geom = "bar")
+qplot(color, data = diamonds, geom = "bar", weight = carat) +
+  scale_y_continuous("carat")
+
+# time series (line/path plots)
+# line plots shows time of x-axis and how variable change over tiem
+# path plots show how 2 variables have changed oevr tiem
+
+qplot(date, unemploy / pop, data = economics, geom = "line")
+qplot(date, uempmed, data = economics, geom = "line")
+
+year <- function(x) as.POSIXlt(x)$year + 1900
+qplot(unemploy / pop, uempmed, data = economics,
+      geom = c("point", "path"))
+qplot(unemploy / pop, uempmed, data = economics,
+      geom = "path", color = year(date)) + scale_size_area()
+
+# using facets
+# histograms showing count
+
+qplot(carat, data = diamonds, facets = color ~ .,
+      geom = "histogram", binwidth = 0.1, xlim = c(0,3))
+
+#histogram showing densities
+
+qplot(carat, ..density.., data = diamonds, facets = color ~ .,
+      geom = "histogram", binwidth = 0.1, xlim = c(0,3))
+
+# other options
+
+qplot(carat, price, data = dsmall,
+       xlab = "Weight (carats)", ylab = "Price ($)",
+       main = "Price-Weight Relationship")
+
+qplot(carat, price/carat, data = dsmall,
+      xlab = "Weight (carats)", ylab = expression(frac(price,carat)),
+      main = "Small diamonds",
+      xlim = c(.2,1))
+
+qplot(carat, price, data = dsmall, log = "xy") # log both axes
+
+# ggplot() --------------------------------------------------------------------
+
+p <- ggplot(diamonds, aes(carat, price, color = cut))
+p <- p + layer(geom = "point")
+p
+
+p <- ggplot(mtcars, aes(mpg, wt, color = cyl)) + geom_point()
+p
+
+# different geoms
+
+df <- data.frame(
+  x = c(3, 1, 5),
+  y = c(2, 4, 6),
+  label = c("a", "b", "c")
+)
+
+# basic plot types
+
+p <- ggplot(df, aes(x, y, label = label)) +
+  xlab(NULL) + ylab(NULL)
+p + geom_point() + ggtitle("point")
+p + geom_bar(stat="identity")
+p + geom_line()
+p + geom_area()
+p + geom_path()
+p + geom_text()
+p + geom_tile()
+p + geom_polygon()
+
+# displaying distributions (histogram)
+# 3 ways of showing distribution of depth and cut
+
+depth_dist <- ggplot(diamonds, aes(depth)) + xlim(58, 68)
+depth_dist + geom_histogram(aes(y = ..density..), 
+                            binwidth = 0.1) + facet_grid(cut ~ .)
+depth_dist + geom_histogram(aes(fill = cut), 
+                            binwidth = 0.1, position = "fill")
+depth_dist + geom_freqpoly(aes(y = ..density.., colour = cut), 
+                           binwidth = 0.1)
+
+# categorical and continous (boxplot)
+
+qplot(cut, depth, data = diamonds, geom="boxplot")
+
+# continuous and continous (boxplot) - need library(plyr)
+qplot(carat, depth, data = diamonds, geom="boxplot",
+      group = round_any(carat, 0.1, floor), xlim = c(0,3))
+
+# categorical and categorical (jitter)
+
+qplot(class, cty, data=mpg, geom="jitter")
+qplot(class, drv, data=mpg, geom="jitter")
+
+# continous (density plot)
+
+qplot(depth, data=diamonds, geom="density", xlim = c(54, 70))
+qplot(depth, data=diamonds, geom="density", xlim = c(54, 70),
+      fill = cut, alpha = 0.5)
+
+
+
+
+
+
+
 
