@@ -21,7 +21,7 @@ help(package = lubridate)
 # Load Data
 ******************************************************************************************************************************
 flights <- tbl_df(read.csv("flights.csv", stringsAsFactors = FALSE))
-
+pew.raw <- tbl_df(read.delim("tidy_data/data/pew.txt", check.names = FALSE, stringsAsFactors = FALSE))
 
 ******************************************************************************************************************************
 # Initial Exploratory
@@ -56,10 +56,16 @@ flights$date <- as.Date(flights$date)
 strptime(flights$date, "%B %d, %Y %H:%M")
 year(), month(), day(), wday(, label=TRUE)
 ymd("1989-05-17")
+hms("03:22:14")
 ymd_hms(2014-08-23 17:23:02)
+mdy("June 17, 2008", tz = "Singapore") #indicate timezone
+update(depart, hours = 17, minutes = 34)
+depart + hours(15) + minutes(50)
+with_tz(arrive, tzone = "Asia/Hong_Kong")
 
-
-
+#check interval
+how_long <- new_interval(last_time, arrive)
+as.period(how_long)
 
 
 ******************************************************************************************************************************
