@@ -11,33 +11,44 @@ View(diamonds)
 # Exploratory Graphs
 # =============================================================================================================
 
-# 1 Categorical Variable
-ggplot(diamonds, aes(x=cut)) + geom_bar()                 # Bar Chart
+# 1 Categorical
 
-# 2 Categorical Variables
+ggplot(diamonds, aes(x=cut)) + geom_bar()
+
+# 2 Categorical 
+
 ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar() 
 ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar(position="fill") 
 ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar(position="dodge")
+ggplot(dsmall, aes(x=cut, color=color)) + geom_density()          
 
-# 1 Continous Variable
+# 1 Continous
+
 ggplot(dsmall, aes(x=price)) + geom_dotplot(dotsize=0.4)
 ggplot(dsmall, aes(x=price)) + geom_histogram(binwidth=500)
 ggplot(dsmall, aes(x=price)) + geom_density(adjust=0.25)
-ggplot(dsmall, aes(x=factor(0), y=price)) + geom_boxplot() + 
-  xlab("") + scale_x_discrete(breaks=NULL) + coord_flip()
+ggplot(dsmall, aes(x=factor(0), y=price)) + geom_boxplot() + xlab("") + scale_x_discrete(breaks=NULL) + coord_flip()
 
 # 1 Continous + 1 Categorical
+
 ggplot(dsmall, aes(x = price)) + geom_dotplot(dotsize=0.4) + facet_grid(cut ~.)
 ggplot(diamonds, aes(x = price)) + geom_histogram()  + facet_grid(cut ~.)
 ggplot(dsmall, aes(x=cut, y=price)) + geom_boxplot()
 ggplot(dsmall, aes(x=cut, y=price)) + geom_boxplot() + coord_flip()
 ggplot(dsmall, aes(x=price, color=cut)) + geom_density()
 
-# 2 continous variables
+# 2 Continous
+
 ggplot(diamonds, aes(x=carat, y=price)) + geom_point()
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + geom_smooth()
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + geom_smooth(method="lm", se=FALSE)
 
+# 2 continous + 1 categorical
+
+ggplot(dsmall, aes(x=carat, y=price, color=color)) + geom_point()                   # third categorical (color)
+ggplot(dsmall, aes(x=carat, y=price, shape=cut)) + geom_point()                     # third categorical (shape)
+ggplot(dsmall, aes(x=carat, y=price, size=carat)) + geom_point()                    # third categorical (size)
+ggplot(dsmall, aes(x=carat, y=price, size=carat)) + geom_point() + stat_smooth()    # add smooth line
 
 
 # Examining distributions
@@ -143,8 +154,6 @@ ggtitle("Title")
 xlim(c(0, 5000))    # zoom in to an interesting area
 
 
-# ggplot2 drill examples
-# ==================================================================================================================
 
 
 

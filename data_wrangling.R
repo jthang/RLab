@@ -10,6 +10,8 @@ library(nycflights13)
  
 flights <- tbl_df(read.csv("flights.csv", stringsAsFactors = FALSE))  #excel file
 pew.raw <- tbl_df(read.delim("tidy_data/data/pew.txt", check.names = FALSE, stringsAsFactors = FALSE))  #text file
+ufo <- tbl_df(read.delim("machine_learning_for_hackers/data/ufo_awesome.tsv",
+                         check.names = FALSE, header=FALSE, stringsAsFactors = FALSE))      # tsv files
 
 write.csv(results, "myresults.csv", na="", row.names=F) 
 
@@ -27,6 +29,9 @@ View(flights)
 unique(flights$dest)              # unique rows within a column
 table(flights$dest)               # put into a table
 data.frame(table(flights$dest))   # puts a column into a dataframe
+
+# Date / Time -----------------------------------------------------------------------------------------------------------------
+ufo$DateOccurred <- ymd(ufo$DateOccurred)
 
 
 # Missing Values -----------------------------------------------------------------------------------------------------------------
