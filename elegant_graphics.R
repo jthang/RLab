@@ -2,41 +2,71 @@ library(ggplot2)
 library(dplyr)
 library(plyr)
 
+library(gcookbook)
+library(reshape2)
 set.seed(1410)
 dsmall <- diamonds[sample(nrow(diamonds), 100),]
 View(diamonds)
 
-
 # Bar Graphs --------------------------------------------------------------------
 
+# Basic bar
+
+qplot(color, data = diamonds, geom = "bar")
+qplot(color, data = diamonds, geom = "bar", weight = carat) + scale_y_continuous("carat")
+
+# x = categorical, y = continous
+
+ggplot(tips, aes(x=time, y=total_bill)) + geom_bar(stat="identity")
+ggplot(tips, aes(x=time, y=total_bill, fill=time)) + geom_bar(stat="identity") # fill with 3 variable
+
+# x = categorical, y = count
+
+ggplot(tips, aes(x=day)) + geom_bar(stat="bin")
+
+
+
+
+
+
+
+# x = continous, y = continous : convert to categorical using factor()
+
+ggplot(BOD, aes(x=factor(Time), y=demand)) + geom_bar(stat="identity")
+
+# change the color of the bar
+
+ggplot(pg_mean, aes(x=group, y=weight)) +
+  geom_bar(stat="identity", fill="lightblue", color="black")
+
+
+
+
+
+qplot(Time, demand, data = BOD, geom = "bar", stat = "identity")
+qplot(factor(cyl), data=mtcars)
 
 
 # Line Graphs --------------------------------------------------------------------
 
+qplot(temperature, pressure, data = pressure, geom = "line")
+qplot(temperature, pressure, data = pressure, geom = c("line", "point"))
+
+# x = time series - shows how variable change over time
+
+qplot(date, unemploy / pop, data = economics, geom = "line")
+qplot(date, uempmed, data = economics, geom = "line")
+
+# path plots show how 2 variables have changed oevr time
+year <- function(x) as.POSIXlt(x)$year + 1900
+qplot(unemploy / pop, uempmed, data = economics,
+      geom = c("point", "path"))
+qplot(unemploy / pop, uempmed, data = economics,
+      geom = "path", color = year(date)) + scale_size_area()
 
 
-
-# Scatter Plots --------------------------------------------------------------------
-
-
-
-
-
-
-# Histograms --------------------------------------------------------------------
-
-
-
-
-# qplot() --------------------------------------------------------------------
-
-
-
-
-
-
-# Elegant Graphics --------------------------------------------------------------------
-
+# Scatter Plots ------------------------------------------------------------------------------------------------
+  
 qplot(carat, price, data = diamonds)
 qplot(log(carat), log(price), data = diamonds)
 qplot(carat, x * y * z, data=diamonds)
@@ -73,56 +103,50 @@ library(MASS)
 qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
       method = "rlm")
 
-# categorical + continuous (boxplot/jittering)
 
-qplot(color, price / carat, data = diamonds, geom = "jitter",
-      alpha = 0.5)
-qplot(color, price / carat, data = diamonds, geom = "boxplot",
-      alpha = 0.5)
+# Distribution (Histogram / Density / Box Plots) --------------------------------------------------------------------
 
-# distribution of variable (histogram/density)
+qplot(carat, data = diamonds, geom = "histogram")               # categorical
+qplot(carat, data = diamonds, geom = "density")                 # categorical
+qplot(cut, depth, data = diamonds, geom = "boxplot")            # categorical + continuous
+qplot(color, price / carat, data = diamonds, geom = "jitter")   # categorical + continuous
 
-qplot(carat, data = diamonds, geom = "histogram")
-qplot(carat, data = diamonds, geom = "density")
+# Experiment with bin
 
-# important to experiment with bin
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 0.1, xlim = c(0,3))
 
-qplot(carat, data = diamonds, geom = "histogram",
-      binwidth = 0.1, xlim = c(0,3))
-qplot(carat, data = diamonds, geom = "histogram",
-      fill = color)
-qplot(carat, data = diamonds, geom = "density",
-      color = color)
+# Adding 2nd categorical variable
 
-# counts instance of variable (bar charts)
+qplot(carat, data = diamonds, geom = "histogram", fill = color)  # Adding 2nd variable
+qplot(carat, data = diamonds, geom = "density", color = color)   # Adding 2nd variable
 
-qplot(color, data = diamonds, geom = "bar")
-qplot(color, data = diamonds, geom = "bar", weight = carat) +
-  scale_y_continuous("carat")
+# Experiment with alpha
 
-# time series (line/path plots)
-# line plots shows time of x-axis and how variable change over tiem
-# path plots show how 2 variables have changed oevr tiem
+qplot(color, price / carat, data = diamonds, geom = "jitter", alpha = 0.5)
+qplot(color, price / carat, data = diamonds, geom = "boxplot", alpha = 0.5)
 
-qplot(date, unemploy / pop, data = economics, geom = "line")
-qplot(date, uempmed, data = economics, geom = "line")
-
-year <- function(x) as.POSIXlt(x)$year + 1900
-qplot(unemploy / pop, uempmed, data = economics,
-      geom = c("point", "path"))
-qplot(unemploy / pop, uempmed, data = economics,
-      geom = "path", color = year(date)) + scale_size_area()
-
-# using facets
-# histograms showing count
+# histograms using Facets
 
 qplot(carat, data = diamonds, facets = color ~ .,
-      geom = "histogram", binwidth = 0.1, xlim = c(0,3))
-
-#histogram showing densities
+      geom = "histogram", binwidth = 0.1, xlim = c(0,3))        # compare count
 
 qplot(carat, ..density.., data = diamonds, facets = color ~ .,
-      geom = "histogram", binwidth = 0.1, xlim = c(0,3))
+      geom = "histogram", binwidth = 0.1, xlim = c(0,3))        # compare density
+
+
+# Other Graphs------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 # other options
 
