@@ -8,6 +8,38 @@ set.seed(1410)
 dsmall <- diamonds[sample(nrow(diamonds), 100),]
 View(diamonds)
 
+# Exploratory Graphs
+# =============================================================================================================
+
+# 1 Categorical Variable
+ggplot(diamonds, aes(x=cut)) + geom_bar()                 # Bar Chart
+
+# 2 Categorical Variables
+ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar() 
+ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar(position="fill") 
+ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar(position="dodge")
+
+# 1 Continous Variable
+ggplot(dsmall, aes(x=price)) + geom_dotplot(dotsize=0.4)
+ggplot(dsmall, aes(x=price)) + geom_histogram(binwidth=500)
+ggplot(dsmall, aes(x=price)) + geom_density(adjust=0.25)
+ggplot(dsmall, aes(x=factor(0), y=price)) + geom_boxplot() + 
+  xlab("") + scale_x_discrete(breaks=NULL) + coord_flip()
+
+# 1 Continous + 1 Categorical
+ggplot(dsmall, aes(x = price)) + geom_dotplot(dotsize=0.4) + facet_grid(cut ~.)
+ggplot(diamonds, aes(x = price)) + geom_histogram()  + facet_grid(cut ~.)
+ggplot(dsmall, aes(x=cut, y=price)) + geom_boxplot()
+ggplot(dsmall, aes(x=cut, y=price)) + geom_boxplot() + coord_flip()
+ggplot(dsmall, aes(x=price, color=cut)) + geom_density()
+
+# 2 continous variables
+ggplot(diamonds, aes(x=carat, y=price)) + geom_point()
+ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + geom_smooth()
+ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + geom_smooth(method="lm", se=FALSE)
+
+
+
 # Examining distributions
 # ==================================================================================================================
 
@@ -34,26 +66,32 @@ depth_dist + geom_freqpoly(aes(y = ..density.., colour = cut),
                            binwidth = 0.1)
 
 
+
+
 # Investigating relationships
 # ==================================================================================================================
 
 # 2 continous variables ---------------------------------------------------------------------------------------------
 
 # Scatter Plots 
+
 ggplot(diamonds, aes(x=carat, y=price)) + geom_point()
 ggplot(diamonds, aes(x=log(carat), y=price)) + geom_point()                         # adding log
 
 # Map extra variables to other aesthetic attributes
+
 ggplot(dsmall, aes(x=carat, y=price, color=color)) + geom_point()                   # third categorical (color)
 ggplot(dsmall, aes(x=carat, y=price, shape=cut)) + geom_point()                     # third categorical (shape)
 ggplot(dsmall, aes(x=carat, y=price, size=carat)) + geom_point()                    # third categorical (size)
 
 # Facetting displays the same plot for different subsets of the data
 # use facets argument, rows on left hand-size 
+
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + facet_grid(. ~ color)
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + facet_grid(color ~ clarity)
 
 # Adding lines, alpha, etc
+
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point(alpha=.2)                        # adding alpha
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + stat_smooth()                # fitting a line
 ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + stat_smooth(method=loess)    # fitting loess
@@ -61,32 +99,19 @@ ggplot(tips, aes(x=total_bill, y=tip, color=sex)) + geom_point() + stat_smooth()
 
 
 # 1 categorical, 1 continuous ---------------------------------------------------------------------------------------------
-ggplot(dsmall, aes(x=cut, y=depth)) + geom_boxplot()                        # Box plots
-ggplot(diamonds, aes(x=color, y=price/carat)) + geom_jitter()               # Jitter
 
+ggplot(dsmall, aes(x=cut, y=depth)) + geom_boxplot()                              # Box plots
+ggplot(diamonds, aes(x=color, y=price)) + geom_jitter()                           # Jitter
+ggplot(diamonds, aes(x=cut, y=price)) + geom_bar(stat="identity")                 # Bar Chart
 
+ggplot(diamonds, aes(x=price)) + geom_histogram() + facet_grid(color ~ .)         # Histogram / Facet
+ggplot(diamonds, aes(x=price)) + geom_density() + facet_grid(color ~ .)           # Density / Facet
 
+# Map extra variables to other aesthetic attributes
 
-
-# 2 categorical ---------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-# Bar Graphs --------------------------------------------------------------------
-Use: x = categorical, y = continous
-
-ggplot(tips, aes(x=time, y=total_bill)) + geom_bar(stat="identity")
-ggplot(tips, aes(x=time, y=total_bill, fill=time)) + geom_bar(stat="identity")      # fill with 3rd categorical
-ggplot(tips, aes(x=time)) + geom_bar(stat="bin")                                    # count
-
-ggplot(tips, aes(x=factor(time), y=total_bill)) + geom_bar(stat="identity")         # adding factor to continuous
+ggplot(tips, aes(x=time, y=total_bill, fill=time)) + geom_bar(stat="identity")      # fill color with X variable
 ggplot(tips, aes(x=time, y=total_bill, fill=sex)) +
-  geom_bar(stat="identity", position=position_dodge())                              # adding another categorical
+  geom_bar(stat="identity", position=position_dodge())                              # add new categorical
 
 # Line Graphs --------------------------------------------------------------------
 
@@ -94,8 +119,6 @@ ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line()
 ggplot(pressure, aes(x=temperature, y=pressure)) + geom_line() + geom_point()
 
 ggplot(economics, aes(x=date, y=unemploy / pop)) + geom_line()                      # time series
-
-
 
 
 # Facets ----------------------------------------------------------------------------------------------------
@@ -117,9 +140,11 @@ ggplot(tips, aes(x=tip, y=total_bill)) + geom_point() + facet_wrap(~ sex, ncol=2
 # Other Options -----------------------------------------------------------------------------------------------
 xlab("X Label")
 ggtitle("Title")
+xlim(c(0, 5000))    # zoom in to an interesting area
 
 
-
+# ggplot2 drill examples
+# ==================================================================================================================
 
 
 
