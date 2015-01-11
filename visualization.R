@@ -10,44 +10,53 @@ dsmall <- diamonds[sample(nrow(diamonds), 100),]
 # Exploratory Graphs
 # =============================================================================================================
 
+con <- ggplot(dsmall, aes(x=price))
+cat <- ggplot(dsmall, aes(x=cut))
+
 # 1 Categorical
 
-ggplot(diamonds, aes(x=cut)) + geom_bar()
+cat + geom_bar()
 
-# 2 Categorical 
+# 1 Categorical + 1 variable
 
-ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar() 
-ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar(position="fill") 
-ggplot(diamonds, aes(x=cut, fill=color)) + geom_bar(position="dodge")
-ggplot(dsmall, aes(x=cut, color=color)) + geom_density()          
+cat + aes(y=price) + geom_bar(stat="identity")
+cat + aes(fill=color) + geom_bar()
+cat + aes(fill=color) + geom_bar(position="fill")
+cat + aes(fill=color) + geom_bar(position="dodge")
+cat + aes(color=color) + geom_density()
+cat + aes(y=price) + geom_boxplot() + coord_flip()
 
-# 1 Continous
+# 1 Continous (Distribution)
 
-ggplot(dsmall, aes(x=price)) + geom_dotplot(dotsize=0.4)
-ggplot(dsmall, aes(x=price)) + geom_histogram(binwidth=500)
-ggplot(dsmall, aes(x=price)) + geom_density(adjust=0.25)
-ggplot(dsmall, aes(x=factor(0), y=price)) + geom_boxplot() + xlab("") + scale_x_discrete(breaks=NULL) + coord_flip()
+con + geom_dotplot(dotsize=0.4)
+con + geom_density(adjust=0.25)
+con + geom_histogram(binwidth=500)
 
 # 1 Continous + 1 Categorical
 
-ggplot(dsmall, aes(x = price)) + geom_dotplot(dotsize=0.4) + facet_grid(cut ~.)
-ggplot(diamonds, aes(x = price)) + geom_histogram()  + facet_grid(cut ~.)
-ggplot(dsmall, aes(x=cut, y=price)) + geom_boxplot()
-ggplot(dsmall, aes(x=cut, y=price)) + geom_boxplot() + coord_flip()
-ggplot(dsmall, aes(x=price, color=cut)) + geom_density()
+con + geom_density(adjust=0.25) + aes(color=color)
+con + geom_density(adjust=0.25) + aes(fill=color, alpha=0.2)
+con + geom_density(adjust=0.25) + aes(color=cut) + facet_grid(cut ~.)
+con + geom_histogram() + aes(fill=cut)
+con + geom_histogram() + aes(fill=cut) + facet_grid(cut ~.)
 
-# 2 Continous
+# 2 continuous (scatterplots)
 
-ggplot(diamonds, aes(x=carat, y=price)) + geom_point()
-ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + geom_smooth()
-ggplot(dsmall, aes(x=carat, y=price)) + geom_point() + geom_smooth(method="lm", se=FALSE)
+g = ggplot(dsmall, aes(x=carat, y=price)) + geom_point()
+g
+g + aes(color=cut)    # categorical
+g + aes(color=carat)  # continuous
+g + aes(shape=cut)    # categorical
+g + aes(size=cut)     # categorical
+g + aes(color=carat) + scale_colour_gradient(low="red", high="blue")
 
-# 2 continous + 1 categorical
+g + geom_smooth()
+g + geom_smooth(method="lm", se=FALSE)
+g + geom_smooth()
+g + facet_grid(cut ~.)
+g + facet_wrap(~ cut)
+g + facet_wrap(cut ~ color)
 
-ggplot(dsmall, aes(x=carat, y=price, color=color)) + geom_point()                   # third categorical (color)
-ggplot(dsmall, aes(x=carat, y=price, shape=cut)) + geom_point()                     # third categorical (shape)
-ggplot(dsmall, aes(x=carat, y=price, size=carat)) + geom_point()                    # third categorical (size)
-ggplot(dsmall, aes(x=carat, y=price, size=carat)) + geom_point() + stat_smooth()    # add smooth line
 
 
 # Examining distributions
@@ -64,6 +73,8 @@ ggplot(dsmall, aes(x=carat, fill=color)) + geom_histogram()         # adding 2nd
 ggplot(dsmall, aes(x=carat, color=color)) + geom_density()          # adding 2nd categorical
 
 ggplot(dsmall, aes(x=cut, y=depth)) + geom_jitter(alpha=.5)         # adjusting alpha
+
+ggplot(dsmall, aes(x=factor(0), y=price)) + geom_boxplot() + xlab("") + scale_x_discrete(breaks=NULL) + coord_flip()
 
 # 3 ways of showing distributions
 
@@ -153,10 +164,19 @@ ggtitle("Title")
 xlim(c(0, 5000))    # zoom in to an interesting area
 
 
+# Various Distributions --------------------------------------------
 
+normal.values <- rnorm(250, 0, 1) 
+cauchy.values <- rcauchy(250, 0, 1)
+gamma.values <- rgamma(100000, 1, 0.001)
 
+# add exponential, poisson, beta, etc
 
+range(normal.values) 
+range(cauchy.values)
 
-
+ggplot(data.frame(X = normal.values), aes(x = X)) + geom_density() 
+ggplot(data.frame(X = cauchy.values), aes(x = X)) + geom_density()
+ggplot(data.frame(X = gamma.values), aes(x = X)) + geom_density() 
 
 
