@@ -6,7 +6,6 @@ library(gcookbook)
 library(reshape2)
 set.seed(1410)
 dsmall <- diamonds[sample(nrow(diamonds), 100),]
-View(diamonds)
 
 # Exploratory Graphs
 # =============================================================================================================
