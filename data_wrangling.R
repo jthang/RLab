@@ -15,7 +15,7 @@ ufo <- tbl_df(read.delim("machine_learning_for_hackers/data/ufo_awesome.tsv",
 
 write.csv(results, "myresults.csv", na="", row.names=F) 
 
-# Initial Exploratory -----------------------------------------------------------------------------------------------------------
+# Initial / Numeric Summaries -----------------------------------------------------------------------------------------------------------
 
 dim(flights)
 head(flights)
@@ -46,10 +46,6 @@ sum(is.na(flights$arr_delay))     # total NA
 flights[is.na(flights)] = 0           #set all missing to zero
 flights[!is.na(flights$arr_delay),]   #drop rows with missing values in column
 
-
-# Numeric Summaries -----------------------------------------------------------------------------------------------------------------------
-str()
-summary()
 
 # Sample Rows --------------------------------------------------------------------------------------------------------------------
 
