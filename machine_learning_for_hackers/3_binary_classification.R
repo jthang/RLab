@@ -35,13 +35,32 @@ head(all.spam)
 get.tdm <- function(doc.vec) {
   doc.corpus <- Corpus(VectorSource(doc.vec))
   control <- list(stopwords=TRUE, removePunctuation=TRUE, removeNumbers=TRUE,
-                  minDocFreq=2)
+                  minDocFreq=2) # only terms appearing more than once
   doc.dtm <- TermDocumentMatrix(doc.corpus, control)
   return(doc.dtm)
 }
 
 # get tdm for all.spam
-spam.dtm <- get.tdm(all.spam)
+spam.tdm <- get.tdm(all.spam)
+
+# convert all to a giant matrix
+spam.matrix <- as.matrix(spam.tdm)
+spam.counts <- rowSums(spam.matrix)
+spam.df <- data.frame(cbind(names(spam.counts),
+                            as.numeric(spam.counts)), stringsAsFactors=FALSE)
+names(spam.df) <- c("term", "frequency")
+spam.df$frequency <- as.numeric(spam.df$frequency)
+
+spam.occurence <- sapply(1:nrow(spam.matrix),
+                         function(i){
+                           length(which(spam.matrix[i, ] > 0)) / ncol(spam.matrix)})
+spam.density <- spam.df$frequency / sum(spam.df$frequency)
+
+spam.df <- spam.df %>%
+  mutate(
+    density=spam.density,
+    occurrence=spam.occurrence)
+
 
 
 
