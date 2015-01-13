@@ -58,11 +58,6 @@ g + geom_point(size=3) + coord_flip() +
 
 
 
-
-
-
-
-
 names(a)[6] <- "Passengers"
 
 a1 <- a %>%
