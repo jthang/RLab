@@ -70,6 +70,7 @@ distinct(select(flights, origin, dest))           # select unqiue rows in multip
 
 
 # Filter Rows ---------------------------------------------------------------------------------------------------------------------
+# Use filter to remove outliers
 
 filter(flights, dest == "SFO")                    # select rows
 filter(flights, dest == "SFO", dep_delay >= 10)   # using AND conditions
