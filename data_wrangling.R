@@ -31,11 +31,15 @@ table(flights$dest)               # put into a table
 data.frame(table(flights$dest))   # puts a column into a dataframe
 
 # Date / Time -----------------------------------------------------------------------------------------------------------------
+
 ufo$DateOccurred <- ymd(ufo$DateOccurred)
 
 # Column Types / Names -----------------------------------------------------------------------------------------------------------------
-..factor...
-rename columns
+
+names(class.df) <- c("Pr.SPAM" ,"Pr.HAM", "Class", "Type")    # rename column names
+class.df$Pr.HAM <- as.numeric(class.df$Pr.HAM)                # change to num
+class.df$Class <- as.logical(as.numeric(class.df$Class))      # change to logic (FALSE, TRUE)
+class.df$Type <- as.factor(class.df$Type)                     # change to factor
 
 # Missing Values -----------------------------------------------------------------------------------------------------------------
 
@@ -217,3 +221,12 @@ paths <- dir("data", pattern = "\\.csv$", full.names = TRUE)
 names(paths) <- basename(paths)
 ldply(paths, read.csv, stringsAsFactors = FALSE)
 
+
+# Save files and plots ------------------------------------------------------------------------------------------------
+
+ggsave(plot = class.plot,
+       filename = file.path("images", "classification.pdf"),
+       height = 10,
+       width = 10)
+
+write.csv(spam.df, file.path("data", "spam_df.csv"), row.names = FALSE)
