@@ -17,6 +17,12 @@ cat <- ggplot(dsmall, aes(x=cut))
 
 cat + geom_bar()
 
+# sorted bar plots
+fig <- ggplot(from.ex, aes(reorder(From.Email, Freq), Freq))
+fig + geom_bar(stat="identity") + coord_flip() +
+  ylab("Number of Emails Received (truncated at 6)") +
+  xlab("Sender Address")
+
 # 1 Categorical + 1 variable
 
 cat + aes(y=price) + geom_bar(stat="identity")
