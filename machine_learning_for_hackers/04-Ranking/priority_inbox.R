@@ -20,14 +20,14 @@
 # NOTE: If you are running this in the R console you must use the 'setwd' command to set the 
 # working directory for the console to whereever you have saved this file prior to running.
 # Otherwise you will see errors when loading data or saving figures!
-                       
+                  
 # Load libraries
 library('tm')
 library('ggplot2')
 library('plyr')
-
+library("reshape")
 # Set the global paths
-data.path <- file.path("..", "03-Classification", "data")
+data.path <- file.path("04-Ranking", "data")
 easyham.path <- file.path(data.path, "easy_ham")
 
 # We define a set of function that will extract the data
